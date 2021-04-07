@@ -1,0 +1,99 @@
+:showtitle:
+:icons: font
+
+= Rust CLI demo
+
+The CLI tool here takes two arguments: an S3 bucket and S3 key.  It fetches the corresponding object, parses it as JSON, interprets it as a Kartlytics summary file, and prints the first few elements from the summary.
+
+Build with:
+
+[source,text]
+----
+$ cargo build
+----
+
+The error reporting could be nicer looking but the error messages are fairly clear.
+
+== Examples
+
+Missing aruments:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list
+error: The following required arguments were not provided:
+    <bucket>
+    <key>
+
+USAGE:
+    kartlytics-list <bucket> <key> --max-videos <max-videos> --region <region>
+
+For more information try --help
+----
+
+Help output:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list --help
+kartlytics-list 0.1.0
+Print list of kartlytics videos
+
+USAGE:
+    kartlytics-list [OPTIONS] <bucket> <key>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+        --max-videos <max-videos>    Maximum number of videos to print [default: 10]
+        --region <region>            AWS region for S3 bucket [default: us-east-1]
+
+ARGS:
+    <bucket>    AWS bucket containing the object to fetch
+    <key>       AWS key identifying the object to fetch
+----
+
+Happy case:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list kartlytics prime/out/summary.json
+printing up to 10 videos
+ID                               UPLOADED
+c17e61085600a00db9e36f50ae18a7b5 2012-08-18 06:37:20.400 UTC
+f68208a4abd6740d964ee32ebbe8ba73 2012-09-01 23:27:29.945 UTC
+c47e73367fae15e07551e22f63fc2d49 2012-09-14 16:20:02.045 UTC
+53e296cc1d0e8b0cc0c7916251dc1626 2012-08-04 04:15:33.186 UTC
+62a4fa5901fc55a598fb5d0e75eff67f 2012-09-05 16:32:26.243 UTC
+56c2b7e92c5b849ee804c0a3aa50c21b 2012-09-19 16:05:12.692 UTC
+4ff06bb1ed2d45cff31d8e5c51ebf397 2012-07-08 21:27:24.863 UTC
+f3bc26ae3d49eb91e3ef3c6e088eb1a9 2012-08-18 06:32:09.207 UTC
+57999b8efbe0445dd6851c8d2b7612ce 2012-09-05 16:33:07.515 UTC
+214623df20772edd391b7256f6cb174b 2012-09-02 02:24:06.436 UTC
+----
+
+Override max videos:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list --max-videos 3 kartlytics prime/out/summary.json
+printing up to 3 videos
+ID                               UPLOADED
+c17e61085600a00db9e36f50ae18a7b5 2012-08-18 06:37:20.400 UTC
+f68208a4abd6740d964ee32ebbe8ba73 2012-09-01 23:27:29.945 UTC
+c47e73367fae15e07551e22f63fc2d49 2012-09-14 16:20:02.045 UTC
+----
+
+Error case: nonexistent key:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list kartlytics junk
+Error: fetching bucket "kartlytics" key "junk"
+
+Caused by:
+    0: The specified key does not exist.
+    1: The specified key does not exist.
+----
