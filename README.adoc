@@ -86,6 +86,14 @@ f68208a4abd6740d964ee32ebbe8ba73 2012-09-01 23:27:29.945 UTC
 c47e73367fae15e07551e22f63fc2d49 2012-09-14 16:20:02.045 UTC
 ----
 
+Error case: invalid region name:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list --region=joyent kartlytics prime/out/2013-07-25_0002.mov/transcript.json
+error: Invalid value for '--region <region>': Not a valid AWS region: joyent
+----
+
 Error case: nonexistent key:
 
 [source,text]
