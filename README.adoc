@@ -97,3 +97,14 @@ Caused by:
     0: The specified key does not exist.
     1: The specified key does not exist.
 ----
+
+Error case: JSON doesn't match what's expected:
+
+[source,text]
+----
+$ ./target/debug/kartlytics-list kartlytics prime/out/2013-07-25_0002.mov/races.json
+Error: parsing object
+
+Caused by:
+    missing field `id` at line 714 column 5
+----
