@@ -12,7 +12,16 @@ Build with:
 $ cargo build
 ----
 
-The error reporting could be nicer looking but the error messages are fairly clear.
+
+This demos a CLI program that uses:
+
+- required arguments
+- optional arguments, with default values
+- argument validation
+- AWS
+- JSON parsing
+
+It produces useful error messages for all failure cases.  The error reporting could look nicer, but the error messages are pretty clear.
 
 == Examples
 
